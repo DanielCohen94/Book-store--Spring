@@ -1,6 +1,4 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7947942&assignment_repo_type=AssignmentRepo)
-
-<h1>Book Store- Ex4</h1>
+<h1>Book Store-Spring</h1>
 <p>A book store web application.
 In the store the user able to browse different books, add them to shopping cart and buy them.
 In addition is the admin panel, were the admin can manipulate the book repository and view the payments history.
@@ -47,6 +45,10 @@ running on port 8080. </p>
     Payments
   </li>
 </ol>
+
+
+
+
 	 
 
 
