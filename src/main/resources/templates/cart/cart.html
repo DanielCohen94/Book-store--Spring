@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/head.html :: head"></head>
+
+<body style="background-color:#d6e1e0;">
+<span th:replace="fragments/navbar.html::navbar(search=false, total=${totalSize})"></span>
+
+<div class="container">
+    <div th:if="${books.size()} > 0">
+        <h2 th:if="${total} <= 0">It is not possible to make a purchase with an account not larger than zero</h2>
+        <div th:if="${booksToRm.size()} > 0">
+            <div class="row">
+                <h2 class="col-md-8"> Unfortunately the purchase can not be completed
+                    Please remove the following books and try again</h2>
+                <div class="col-md-3">
+                    <table class="table table-dark table-responsive-md text-center">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="book : ${booksToRm}">
+                            <td th:text="${book}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div th:if="${books} != null" th:switch="${books.size()}" class="mx-auto col-md-10">
+            <h3 th:case="0">No books yet in cart</h3>
+            <div th:case="*">
+                <h5 >You have <span th:text="${books.size()}"></span>
+                item in your basket Total cost:
+                <span th:text="${#numbers.formatCurrency(total)}"></span>
+                </h5>
+                <span th:replace="fragments/tableDark::darkT(isStore=false,books=${books})"></span>
+            </div>
+        </div>
+        <div class="col-md-2 mx-auto" th:if="${books.size} > 0">
+            <form action="#" th:action="@{/buy}" method="post">
+                <div class="row">
+                    <div class="col-md-6 mt-5">
+                        <input type="submit" class="btn btn-success" value="Chackout">
+                    </div>
+                </div>
+            </form>
+            <form action="#" th:action="@{cart/deleteAll}" method="post">
+                <div class="row">
+                    <div class="col-md-6 mt-5">
+                        <input type="submit" class="btn btn-danger" value="empty cart">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

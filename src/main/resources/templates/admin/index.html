@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/head.html :: head"></head>
+<body style="background-color:#000000;">
+
+<div th:fragment="logout" class="logout text-light" sec:authorize="isAuthenticated()">
+    Logged user: <span sec:authentication="name"></span> |
+    Roles: <span sec:authentication="principal.authorities"></span> |
+    <!--/* When using CSRF this needs to be a POST */-->
+    <form th:action="@{/logout}" method="post" style="display:inline">
+        <input type="submit" value="Logout"/>
+    </form>
+</div>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xl-8">
+            <p class="my-5 text-center"><a href="/admin/newBook" class="btn btn-primary">
+                <i class="fas fa-book ml-2"> NEW BOOK</i>
+            </a>
+            <div th:switch="${books.size()}" >
+                <h2 th:case="0" class="text-center" style="color: #E0FFFF">No books yet!</h2>
+                <div th:case="*">
+                    <h2 class="my-5 text-center" style="color: #E0FFFF">Books repository</h2>
+                    <table class="table table-striped table-responsive-md">
+                        <thead>
+                        <tr class="bg-info" style="opacity: 0.8;">
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Discount</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr class="bg-info" th:each="book : ${books}">
+                            <td th:text="${book.bookName}"></td>
+                            <td>
+                                <img alt="image" class="img-thumbnail card-img-top img img-fluid img-responsive imagetable"
+                                     th:src="${book.image}"
+                                     style="max-width: 200px">
+                            </td>
+                            <td th:text="${book.quantity}"></td>
+                            <td th:text="${#numbers.formatCurrency(book.price)}"></td>
+                            <td th:text="${book.discount}"></td>
+                            <td>
+                                <!-- not recommended: using GET controller <a th:href="@{/edit/{id}(id=${user.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a> -->
+                                <form action="#" th:action="@{/admin/edit}" th:object="${book}" method="post">
+                                    <input type="hidden" name="id" th:value="${book.id}">
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-edit"> EDIT</i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="#" th:action="@{/admin/delete/{id}(id=${book.id})}" th:object="${book}"
+                                      method="post">
+                                    <input type="hidden" name="id" th:value="${book.id}">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"> DELETE</i>
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xl-4">
+            <div th:switch="${payments.size()}" >
+                <h2 th:case="0" class="text-center" style="color: #E0FFFF">No payments yet!</h2>
+                <div th:case="*">
+                    <h2 class="my-5 text-center" style="color:#ADD8E6" th:text="${'Total payments: ' + #numbers.formatCurrency(sumPayments)}"></h2>
+                    <h2 class="my-5 text-center" style="color:#E0FFFF">History payments</h2>
+                    <table class="table table-striped table-responsive-md">
+                        <thead>
+                        <tr class="bg-success" style="opacity: 0.8;">
+                            <th>Date</th>
+                            <th>User</th>
+                            <th>Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="bg-success" th:each="payment : ${payments}">
+                            <td th:text="${payment.user}"></td>
+                            <td th:text="${payment.date}"></td>
+                            <td th:text="${#numbers.formatCurrency(payment.amount)}"></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

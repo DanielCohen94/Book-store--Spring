@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/head.html :: head"></head>
+<body style="background-color:#d6e1e0;">
+
+<span th:replace="fragments/navbar.html::navbar(search=true, total=${total})"></span>
+
+<div class="container">
+
+    <div class="row text-center">
+        <div th:if="${booksSearch} != null" th:switch="${booksSearch.size()}" class="mx-auto col-md-9">
+            <h3 th:case="0">Not find result to your search</h3>
+            <div th:case="*">
+                <span th:replace="fragments/tableDark::darkT(isStore=true,books=${booksSearch})"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <h3 th:if="${books.size()} == 0" class="mx-auto">No books yet in store</h3>
+        <div class="card col-10 col-sm-3 col-lg-2 bg-light" th:unless="${books.size()} == 0" style="width: 18rem;" th:each="book: ${books}">
+            <img alt="image" class="card-img-top img img-fluid img-responsive imagecard"
+                 th:src="${book.image}"
+                 style="max-width: 200px">
+            <div class="card-body">
+                <h5 class="card-title" th:text="*{book.bookName}"></h5>
+                <h5 class="bg-danger" th:if="${book.quantity} == 0"
+                >Out of stock</h5>
+                <span th:if="${book.discount} > 0">
+                <del class="text-danger" th:text="${#numbers.formatCurrency(book.price)}"></del>
+                <p th:with="total=(${book.price} * (1-(${book.discount}/100)))"
+                   class="text-success" th:text="${#numbers.formatCurrency(total)}"></p>
+            </span>
+                <span th:th:unless="${book.discount} > 0">
+                <p class="text-success"  th:text="${#numbers.formatCurrency(book.price)}"></p>
+            </span>
+                <form action="#" th:action="@{/cart/addToCart}" th:object="${book}" method="post">
+                    <input type="hidden" name="book" th:value="${book.id}">
+                    <input class="btn btn-primary mx-auto" style="position: absolute; bottom: 0px; left:20px; right:20px" type="submit" value="Add to cart"/>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
+

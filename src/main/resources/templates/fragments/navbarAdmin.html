@@ -1,0 +1,17 @@
+<nav th:fragment="navbar (search, total)" class="navbar navbar-light bg-light">
+
+    <a class="navbar-brand" href="/">
+        <i class="fas fa-book ml-2"></i>
+        Store
+    </a>
+
+    <form action="#" th:if="${search}" th:action="@{/search}" method="post" class="form-inline">
+        <input type="text" name="bookName" placeholder="Search books by name">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+    <a class="navbar-brand" href="/cart">
+        Cart
+        <i class="fa badge fa-lg" th:value="${total}">&#xf07a;</i>
+    </a>
+</nav>

@@ -1,0 +1,48 @@
+<table th:fragment="darkT (isStore,books)" class="table table-dark table-responsive-md">
+    <caption style="caption-side:top;  font-size: 20px;font-weight: bold;"
+             class="bg-primary text-center text-light">
+        <span th:if="${isStore}">Search result:</span>
+        <span th:unless="${isStore}">Your cart:</span>
+    </caption>
+    <thead class="thead-success ">
+    <tr>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th th:unless="${isStore}">Quantity</th>
+        <th th:if="${isStore}">Add</th>
+        <th th:unless="${isStore}">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.bookName}">2</td>
+        <td>
+            <img th:src="${book.image}" style="max-width: 200px"
+                 class="img-thumbnail card-img-top img img-fluid img-responsive imagetable" alt="image">
+            <h5 th:if="${book.quantity} == 0"
+            >Out of stock</h5>
+        </td>
+        <td th:if="${book.discount} > 0">
+            <del class="text-danger" th:text="${#numbers.formatCurrency(book.price)}"></del>
+            <p class="text-success"
+               th:text="${#numbers.formatCurrency(book.price * (1-(book.discount/100)))}"
+            ></p>
+        </td>
+        <td th:unless="${book.discount} > 0">
+            <p class="text-success" th:text="${#numbers.formatCurrency(book.price)}"></p>
+        </td>
+        <td th:unless="${isStore}" th:text="${book.Quantity}"></td>
+
+        <td>
+            <form action="#" th:if="${isStore}" th:action="@{/cart/addToCart}" th:object="${book}" method="post">
+                <input type="hidden" name="book" th:value="${book.id}">
+                <input class="btn btn-primary" type="submit" value="Add to cart"/></form>
+            <form action="#" th:unless="${isStore}" th:action="@{/cart/delete/{id}(id=${book.id})}" th:object="${book}"
+                  method="post">
+                <input type="hidden" name="id" th:value="${book.id}">
+                <input class="btn btn-primary" type="submit" value="Delete"/></form>
+        </td>
+    </tr>
+    </tbody>
+</table>

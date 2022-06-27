@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/head.html :: head"></head>
+<body style="background-color:#d6e1e0;">
+
+<span th:replace="fragments/navbar.html::navbar(search=false, total=${total})"></span>
+
+<div class="container-fluid">
+    <div class="text-caner mx-auto">
+        <h1 class="text-success"
+            th:text="${'The purchase was completed successfully with total cost: ' + #numbers.formatCurrency(sum)}"></h1>
+    </div>
+</div>
+
+</body>
+</html>
+
